@@ -47,7 +47,7 @@ h3 { margin: 0 0 6px; color: var(--gold-soft); font: 700 clamp(.95rem, 1vw, 1.25
 .info .k { color: var(--muted); }
 .info .v { color: var(--text); }
 .info .v.price { color: var(--gold); font-weight: 700; }
-.pay { margin-top: 4px; padding: 10px 12px; border: 1px solid #f2c14e44; background: #f2c14e0a; border-radius: 10px;
+.pay { margin-top: 4px; padding: 10px 12px; border: 1px solid var(--gold); background: #f2c14e0a; border-radius: 10px;
   font: clamp(15px, 1.05vw, 19px)/1.5 var(--mono); }
 .pay .or { text-align: center; color: var(--gold-soft); font: 700 .95rem var(--serif); letter-spacing: .2em; margin: 6px 0; }
 .pay a { color: #7fb8ff; }
@@ -55,11 +55,34 @@ a[href], button { cursor: pointer; }
 .cp.ok { color: var(--up); border-color: var(--up); }
 .cp { font: inherit; color: var(--gold-soft); background: #f2c14e0d; border: 1px solid #f2c14e66; border-radius: 6px; padding: 0 6px; cursor: pointer; }
 
+/* Арт турнира над карточкой «Турнир»: занимает свободную высоту */
+.art { flex: 1 1 0; min-height: 70px; border-radius: 14px; border: 1px solid var(--line); box-shadow: 0 6px 24px #0007;
+  background: center / cover no-repeat; }
+.pay i { font-style: italic; }
+.pay .hint { color: var(--muted); font-size: .85em; }
+.left > .card { flex: none; }
+/* ноутбук: ужимаем левую колонку, чтобы влезли арт и обе карточки */
+@media (max-height: 780px) {
+  body { gap: 8px; padding: 10px 16px 12px; }
+  .left { gap: 8px; }
+  .left > .card { padding: 9px 12px; }
+  .left h2 { font-size: 1.25rem; margin-bottom: 7px; }
+  .qual { font-size: 1.1rem; }
+  .info, .pay, .note { font-size: 14px; }
+  .info { margin-top: 6px; gap: 3px 12px; }
+  .left h3 { margin: 8px 0 4px !important; }
+  .pay { padding: 7px 10px; line-height: 1.4; }
+  .pay .or { margin: 3px 0; }
+  .stat { padding: 6px; }
+  .stat .n { font-size: 2.4rem; }
+  .art { min-height: 40px; }
+}
+
 /* Счётчики */
 .note { margin: -2px 0 12px; font: clamp(15px, 1.05vw, 19px)/1.4 var(--mono); }
 .note a { color: #7fb8ff; }
 .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.stat { text-align: center; padding: 10px 6px; border: 1px solid var(--line); border-radius: 10px; background: #ffffff06; }
+.stat { text-align: center; padding: 10px 6px; border: 1px solid var(--gold); border-radius: 10px; background: #ffffff06; }
 .stat .n { font: 700 3.2rem/1 var(--num); font-variant-numeric: lining-nums; color: var(--gold); }
 .stat .n.ok { color: var(--up); }
 .stat .n.z1 { color: #5aa9ff; } .stat .n.z2 { color: var(--gold); } .stat .n.z3 { color: var(--down); }
@@ -95,6 +118,7 @@ a[href], button { cursor: pointer; }
 </header>
 <main>
   <div class="left">
+    <div class="art" id="art"></div>
     <section class="card">
       <h2>Турнир</h2>
       <div class="qual" id="qual"></div>
@@ -126,6 +150,8 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", 
 const I = D.info, P = D.players;
 
 $("h1").innerHTML = esc(D.title) + (D.event ? '<span class="ev">' + esc(D.event) + "</span>" : "") + '<span class="dt">' + esc(D.date) + "</span>";
+if (D.art) $("art").style.backgroundImage = 'url("../' + D.art + '")';
+else $("art").remove();
 $("built").textContent = "данные собраны " + D.built;
 
 $("qual").innerHTML = esc(I.qual) + (I.slots ? " <b>· " + esc(I.slots) + "</b>" : "");
@@ -135,10 +161,10 @@ $("info").innerHTML =
 
 const pay = [];
 if (I.banks) pay.push('<span style="white-space:nowrap">' + esc(I.banks) + "</span>");
-if (I.phone) pay.push('по номеру <button class="cp" data-v="' + esc(I.phone) + '">' + esc(I.phone) + "</button>");
+if (I.phone) pay.push('<i>по номеру</i> <button class="cp" data-v="' + esc(I.phone) + '">' + esc(I.phone) + '</button> <span class="hint">(кликабельно)</span>');
 if (I.recipient) pay.push(esc(I.recipient));
 let payHtml = pay.join("<br>");
-if (I.cash) payHtml += '<div class="or">ИЛИ</div>' + esc(I.cash);
+if (I.cash) payHtml += '<div class="or">ИЛИ</div><i>' + esc(I.cash) + "</i>";
 $("pay").innerHTML = payHtml;
 
 // клик по номеру — копируем

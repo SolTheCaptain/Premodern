@@ -105,13 +105,14 @@ def main():
     out = Path(sys.argv[1] if len(sys.argv) > 1 else "site") / "TourneyDashes"
     out.mkdir(parents=True, exist_ok=True)
     shutil.copy(HERE / "cinzel.woff2", out / "cinzel.woff2")
+    shutil.copytree(HERE / "art", out / "art", dirs_exist_ok=True)
     template = (HERE / "template.html").read_text(encoding="utf-8")
     cfg = json.loads((HERE / "config.json").read_text(encoding="utf-8"))
     built = datetime.now(MSK).strftime("%d.%m %H:%M")
 
     for t in cfg["tourneys"]:
         info, players = parse(fetch_csv(secret(t["csv"])))
-        data = {"title": t["title"], "event": t.get("event", ""), "date": t["date"], "cap": t["cap"],
+        data = {"title": t["title"], "event": t.get("event", ""), "date": t["date"], "cap": t["cap"], "art": t.get("art", ""),
                 "built": built, "info": info, "players": players}
         page = template.replace("/*DATA*/null", json.dumps(data, ensure_ascii=False))
         page = page.replace("<title>Турнир</title>", f"<title>{t['title']} {t['date']}</title>")
