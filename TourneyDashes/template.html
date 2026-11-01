@@ -44,7 +44,7 @@ h3 { margin: 0 0 6px; color: var(--gold-soft); font: 700 clamp(.95rem, 1vw, 1.25
 .qual { font: 700 1.3rem var(--serif); color: var(--text); letter-spacing: .04em; }
 .qual b { color: var(--gold); }
 .info { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; font: clamp(16px, 1.1vw, 20px)/1.45 var(--mono); margin-top: 10px; }
-.info .k { color: var(--muted); }
+.info .k { color: var(--gold-soft); }
 .info .v { color: var(--text); }
 .info .v.price { color: var(--gold); font-weight: 700; }
 .pay { margin-top: 4px; padding: 10px 12px; border: 1px solid var(--gold); background: #f2c14e0a; border-radius: 10px;
@@ -156,7 +156,7 @@ $("built").textContent = "данные собраны " + D.built;
 
 $("qual").innerHTML = esc(I.qual) + (I.slots ? " <b>· " + esc(I.slots) + "</b>" : "");
 $("info").innerHTML =
-  (I.address ? '<span class="k">Где</span><span class="v">' + esc(I.address) + "</span>" : "") +
+  (I.address ? '<span class="k">Где</span><span class="v">' + esc(I.address).replace(/(^|\s)(г|д|стр|корп|ул)\.\s/g, "$1$2.&nbsp;") + "</span>" : "") +
   (I.price ? '<span class="k">Участие</span><span class="v price">' + esc(I.price) + "</span>" : "");
 
 const pay = [];
