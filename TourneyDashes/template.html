@@ -43,7 +43,8 @@ h3 { margin: 0 0 6px; color: var(--gold-soft); font: 700 clamp(.95rem, 1vw, 1.25
 .left { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
 .qual { font: 700 1.3rem var(--serif); color: var(--text); letter-spacing: .04em; }
 .qual b { color: var(--gold); }
-.info { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; font: clamp(16px, 1.1vw, 20px)/1.45 var(--mono); margin-top: 10px; }
+.info { display: grid; grid-template-columns: max-content 1fr; gap: 6px 12px; font: clamp(15px, 1.05vw, 19px)/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin-top: 10px; }
+.info .v.addr { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .info .k { color: var(--gold-soft); }
 .info .v { color: var(--text); }
 .info .v.price { color: var(--gold); font-weight: 700; }
@@ -156,7 +157,7 @@ $("built").textContent = "данные собраны " + D.built;
 
 $("qual").innerHTML = esc(I.qual) + (I.slots ? " <b>· " + esc(I.slots) + "</b>" : "");
 $("info").innerHTML =
-  (I.address ? '<span class="k">Где</span><span class="v">' + esc(I.address).replace(/(^|\s)(г|д|стр|корп|ул)\.\s/g, "$1$2.&nbsp;") + "</span>" : "") +
+  (I.address ? '<span class="k">Где</span><span class="v addr" title="' + esc(I.address) + '">' + esc(I.address) + "</span>" : "") +
   (I.price ? '<span class="k">Участие</span><span class="v price">' + esc(I.price) + "</span>" : "");
 
 const pay = [];
