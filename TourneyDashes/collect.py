@@ -118,7 +118,8 @@ def main():
         d = out / t["id"]
         d.mkdir(parents=True, exist_ok=True)
         (d / "index.html").write_text(page, encoding="utf-8")
-        print(f"{t['id']}: {len(players)} игроков, оплатили {sum(p[1] for p in players)}")
+        n = len(players)
+        print(f"{t['id']}: {n} {plural(n, 'игрок', 'игрока', 'игроков')}, оплатили {sum(p[1] for p in players)}")
 
 
 if __name__ == "__main__":
