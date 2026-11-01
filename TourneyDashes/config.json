@@ -1,0 +1,12 @@
+{
+  "tourneys": [
+    {
+      "id": "2026-11-15",
+      "title": "Premodern",
+      "date": "15.11.26",
+      "cap": 49,
+      "csv": "$PREMODERN_CSV_URL"
+    }
+  ],
+  "_end": "КОНЕЦ ФАЙЛА config.json"
+}

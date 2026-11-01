@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Турнир</title>
+<style>
+:root {
+  --bg: #0f0a1a; --panel: #1a1230; --panel2: #231a40; --line: #3a2c60;
+  --text: #e6e0f4; --muted: #9488b6; --gold: #f2c14e; --gold-soft: #d9b45f;
+  --up: #6fd39a; --down: #ff5c6c; --warn: #ffb454;
+  --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  --serif: Georgia, "Times New Roman", serif;
+  --num: "Times New Roman", Times, "Liberation Serif", serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  display: flex; flex-direction: column; gap: 12px; padding: 14px 18px 16px;
+  color: var(--text); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(1100px 520px at 85% -8%, #35256455, transparent), var(--bg);
+}
+header { flex: none; display: flex; align-items: center; justify-content: space-between; }
+@font-face { font-family: "Cinzel"; src: url("../cinzel.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+h1 { margin: 0; color: var(--gold); font: 700 2.2rem/1.1 "Cinzel", var(--serif); letter-spacing: .28em; text-transform: uppercase; text-shadow: 0 0 22px #f2c14e40; }
+h1 .dt { margin-left: .9em; }
+.right { color: var(--muted); font-size: 12px; }
+
+main { flex: 1; min-height: 0; display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+.card {
+  display: flex; flex-direction: column; min-height: 0; padding: 12px 14px;
+  background: linear-gradient(165deg, var(--panel2), var(--panel));
+  border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 6px 24px #0007;
+}
+h2 { flex: none; margin: 0 0 12px; color: var(--gold); font: 700 1.6rem var(--serif); letter-spacing: .12em; text-transform: uppercase;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .28em; }
+h3 { margin: 0 0 6px; color: var(--gold-soft); font: 700 clamp(.95rem, 1vw, 1.25rem) var(--serif); letter-spacing: .12em; text-transform: uppercase; }
+
+/* Турнир */
+.left { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.qual { font: 700 1.3rem var(--serif); color: var(--text); letter-spacing: .04em; }
+.qual b { color: var(--gold); }
+.info { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; font: clamp(16px, 1.1vw, 20px)/1.45 var(--mono); margin-top: 10px; }
+.info .k { color: var(--muted); }
+.info .v { color: var(--text); }
+.info .v.price { color: var(--gold); font-weight: 700; }
+.pay { margin-top: 4px; padding: 10px 12px; border: 1px solid #f2c14e44; background: #f2c14e0a; border-radius: 10px;
+  font: clamp(15px, 1.05vw, 19px)/1.5 var(--mono); }
+.pay .or { text-align: center; color: var(--gold-soft); font: 700 .95rem var(--serif); letter-spacing: .2em; margin: 6px 0; }
+.pay a { color: #7fb8ff; }
+a[href], button { cursor: pointer; }
+.cp.ok { color: var(--up); border-color: var(--up); }
+.cp { font: inherit; color: var(--gold-soft); background: #f2c14e0d; border: 1px solid #f2c14e66; border-radius: 6px; padding: 0 6px; cursor: pointer; }
+
+/* Счётчики */
+.note { margin: -2px 0 12px; font: clamp(15px, 1.05vw, 19px)/1.4 var(--mono); }
+.note a { color: #7fb8ff; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stat { text-align: center; padding: 10px 6px; border: 1px solid var(--line); border-radius: 10px; background: #ffffff06; }
+.stat .n { font: 700 3.2rem/1 var(--num); font-variant-numeric: lining-nums; color: var(--gold); }
+.stat .n.ok { color: var(--up); }
+.stat .l { margin-top: 4px; color: var(--muted); font: 700 .88rem var(--serif); letter-spacing: .14em; text-transform: uppercase; }
+.stat .n .cap { font-size: .55em; color: var(--muted); }
+.bar { position: relative; height: 10px; border-radius: 999px; background: #ffffff10; border: 1px solid var(--line); overflow: hidden; margin-top: 10px; }
+.bar i { position: absolute; left: 0; top: 0; bottom: 0; }
+.bar .r { background: #f2c14e66; }
+.bar .p { background: linear-gradient(90deg, #4fb883, var(--up)); }
+.barl { display: flex; justify-content: space-between; color: var(--muted); font-size: 14.5px; margin-top: 4px; }
+
+/* Участники */
+.card.players h2 .cnt { color: var(--gold-soft); text-decoration: none; font-family: var(--num); letter-spacing: .06em; margin-left: .6em; }
+.plist { flex: 1; min-height: 0; overflow: auto; columns: 2; column-gap: 24px; margin: 0; padding: 0; list-style: none;
+  font: clamp(14px, min(1.2vw, 2.3vh), 22px)/1.55 var(--mono); }
+.plist li { display: flex; align-items: center; gap: 8px; break-inside: avoid; padding: 0 6px; border-radius: 6px; }
+.plist li:nth-child(odd) { background: #ffffff05; }
+.plist .no { color: var(--muted); width: 2ch; text-align: right; font-size: .85em; }
+.plist .nm { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.plist .ck { flex: none; width: 17px; height: 17px; border-radius: 4px; border: 1px solid var(--line); }
+.plist li.paid .ck { border-color: var(--up); background: var(--up); box-shadow: 0 0 8px #6fd39a55;
+  -webkit-mask: none; position: relative; }
+.plist li.paid .ck::after { content: "✓"; position: absolute; inset: 0; color: #0f0a1a; font: 900 12px/17px system-ui; text-align: center; }
+.plist li.paid .nm { color: var(--up); font-weight: 700; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="h1"></h1>
+  <div class="right" id="built"></div>
+</header>
+<main>
+  <div class="left">
+    <section class="card">
+      <h2>Турнир</h2>
+      <div class="qual" id="qual"></div>
+      <div class="info" id="info"></div>
+      <h3 style="margin-top:14px">Оплата</h3>
+      <div class="pay" id="pay"></div>
+    </section>
+    <section class="card">
+      <h2>Регистрация</h2>
+      <div class="note" id="note"></div>
+      <div class="stats">
+        <div class="stat"><div class="n" id="reg"></div><div class="l">Записались</div></div>
+        <div class="stat"><div class="n ok" id="paid"></div><div class="l">Оплатили</div></div>
+      </div>
+      <div class="bar"><i class="r" id="barreg"></i><i class="p" id="barpaid"></i></div>
+      <div class="barl"><span id="free"></span><span id="left"></span></div>
+    </section>
+  </div>
+  <section class="card players">
+    <h2>Участники<span class="cnt" id="cnt"></span></h2>
+    <ul class="plist" id="plist"></ul>
+  </section>
+</main>
+<script>
+const D = /*DATA*/null;  // подставляет collect.py
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const I = D.info, P = D.players;
+
+$("h1").innerHTML = esc(D.title) + '<span class="dt">' + esc(D.date) + "</span>";
+$("built").textContent = "данные собраны " + D.built;
+
+$("qual").innerHTML = esc(I.qual) + (I.slots ? " <b>· " + esc(I.slots) + "</b>" : "");
+$("info").innerHTML =
+  (I.address ? '<span class="k">Где</span><span class="v">' + esc(I.address) + "</span>" : "") +
+  (I.price ? '<span class="k">Участие</span><span class="v price">' + esc(I.price) + "</span>" : "");
+
+const pay = [];
+if (I.banks) pay.push('<span style="white-space:nowrap">' + esc(I.banks) + "</span>");
+if (I.phone) pay.push('по номеру <button class="cp" data-v="' + esc(I.phone) + '">' + esc(I.phone) + "</button>");
+if (I.recipient) pay.push(esc(I.recipient));
+let payHtml = pay.join("<br>");
+if (I.cash) payHtml += '<div class="or">ИЛИ</div>' + esc(I.cash);
+$("pay").innerHTML = payHtml;
+
+// клик по номеру — копируем
+document.querySelectorAll(".cp").forEach(b => b.onclick = () => {
+  navigator.clipboard.writeText(b.dataset.v.replace(/[\s-]/g, "")).then(() => {
+    b.classList.add("ok"); setTimeout(() => b.classList.remove("ok"), 900);
+  });
+});
+
+if (I.tg) $("note").innerHTML = 'Фамилия/имя Насте в <a href="' + esc(I.tg) + '" target="_blank">телеграм</a>';
+else $("note").remove();
+
+const reg = P.length, paid = P.filter(p => p[1]).length, cap = D.cap;
+$("reg").innerHTML = reg + '<span class="cap"> / ' + cap + "</span>";
+$("paid").textContent = paid;
+$("barreg").style.width = Math.min(reg / cap * 100, 100) + "%";
+$("barpaid").style.width = Math.min(paid / cap * 100, 100) + "%";
+$("free").textContent = "свободно мест: " + Math.max(cap - reg, 0);
+$("left").textContent = "ждём оплату: " + (reg - paid);
+$("cnt").textContent = paid + " / " + reg;
+$("plist").innerHTML = P.map((p, i) =>
+  '<li class="' + (p[1] ? "paid" : "") + '"><span class="no">' + (i + 1) + '</span><span class="nm">' + esc(p[0]) +
+  '</span><span class="ck"></span></li>').join("");
+</script>
+</body>
+</html>
+<!-- КОНЕЦ ФАЙЛА template.html -->
