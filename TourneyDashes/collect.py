@@ -111,7 +111,7 @@ def main():
 
     for t in cfg["tourneys"]:
         info, players = parse(fetch_csv(secret(t["csv"])))
-        data = {"title": t["title"], "date": t["date"], "cap": t["cap"],
+        data = {"title": t["title"], "event": t.get("event", ""), "date": t["date"], "cap": t["cap"],
                 "built": built, "info": info, "players": players}
         page = template.replace("/*DATA*/null", json.dumps(data, ensure_ascii=False))
         page = page.replace("<title>Турнир</title>", f"<title>{t['title']} {t['date']}</title>")

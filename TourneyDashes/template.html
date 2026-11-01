@@ -24,8 +24,10 @@ body {
 header { flex: none; display: flex; align-items: center; justify-content: space-between; }
 @font-face { font-family: "Cinzel"; src: url("../cinzel.woff2") format("woff2"); font-weight: 700; font-display: swap; }
 h1 { margin: 0; color: var(--gold); font: 700 2.2rem/1.1 "Cinzel", var(--serif); letter-spacing: .28em; text-transform: uppercase; text-shadow: 0 0 22px #f2c14e40; }
+h1 .ev { margin-left: .9em; font-size: .62em; letter-spacing: .2em; }
 h1 .dt { margin-left: .9em; }
-.right { color: var(--muted); font-size: 12px; }
+h1 { display: flex; align-items: baseline; white-space: nowrap; }
+.right { color: var(--muted); font-size: 12px; white-space: nowrap; }
 
 main { flex: 1; min-height: 0; display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
 .card {
@@ -60,6 +62,7 @@ a[href], button { cursor: pointer; }
 .stat { text-align: center; padding: 10px 6px; border: 1px solid var(--line); border-radius: 10px; background: #ffffff06; }
 .stat .n { font: 700 3.2rem/1 var(--num); font-variant-numeric: lining-nums; color: var(--gold); }
 .stat .n.ok { color: var(--up); }
+.stat .n.z1 { color: #5aa9ff; } .stat .n.z2 { color: var(--gold); } .stat .n.z3 { color: var(--down); }
 .stat .l { margin-top: 4px; color: var(--muted); font: 700 .88rem var(--serif); letter-spacing: .14em; text-transform: uppercase; }
 .stat .n .cap { font-size: .55em; color: var(--muted); }
 .bar { position: relative; height: 10px; border-radius: 999px; background: #ffffff10; border: 1px solid var(--line); overflow: hidden; margin-top: 10px; }
@@ -115,11 +118,12 @@ a[href], button { cursor: pointer; }
 </main>
 <script>
 const D = /*DATA*/null;  // подставляет collect.py
+const REG_ZONES = [20, 35];  // записались: до 20 синий, до 35 жёлтый, дальше красный
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
 const I = D.info, P = D.players;
 
-$("h1").innerHTML = esc(D.title) + '<span class="dt">' + esc(D.date) + "</span>";
+$("h1").innerHTML = esc(D.title) + (D.event ? '<span class="ev">' + esc(D.event) + "</span>" : "") + '<span class="dt">' + esc(D.date) + "</span>";
 $("built").textContent = "данные собраны " + D.built;
 
 $("qual").innerHTML = esc(I.qual) + (I.slots ? " <b>· " + esc(I.slots) + "</b>" : "");
@@ -146,6 +150,7 @@ if (I.tg) $("note").innerHTML = 'Фамилия/имя Насте в <a href="' 
 else $("note").remove();
 
 const reg = P.length, paid = P.filter(p => p[1]).length, cap = D.cap;
+$("reg").classList.add(reg <= REG_ZONES[0] ? "z1" : reg <= REG_ZONES[1] ? "z2" : "z3");
 $("reg").innerHTML = reg + '<span class="cap"> / ' + cap + "</span>";
 $("paid").textContent = paid;
 $("barreg").style.width = Math.min(reg / cap * 100, 100) + "%";
