@@ -8,6 +8,16 @@
       "cap": 49,
       "art": "art/autumn-willow.jpg",
       "csv": "$PREMODERN_CSV_URL"
+    },
+    {
+      "id": "2026-11-15-test",
+      "template": "template-test.html",
+      "title": "Premodern",
+      "event": "Autumn Willow Finals'26 Qualifier",
+      "date": "15.11.26",
+      "cap": 49,
+      "art": "art/autumn-willow.jpg",
+      "csv": "$PREMODERN_CSV_URL"
     }
   ],
   "_end": "КОНЕЦ ФАЙЛА config.json"
