@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="format-detection" content="telephone=no">
 <meta name="color-scheme" content="dark">
 <title>Турнир</title>
 <style>
@@ -16,6 +17,9 @@
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
+/* Safari: не раздувать шрифты на телефоне */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+button { -webkit-appearance: none; appearance: none; }
 body {
   display: flex; flex-direction: column; gap: 12px; padding: 14px 18px 16px;
   color: var(--text); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -63,7 +67,7 @@ a[href], button { cursor: pointer; }
 .pay .hint { color: var(--muted); font-size: .85em; }
 .left > .card { flex: none; }
 /* ноутбук: ужимаем левую колонку, чтобы влезли арт и обе карточки */
-@media (max-height: 780px) {
+@media (max-height: 780px) and (min-width: 761px) {
   body { gap: 8px; padding: 10px 16px 12px; }
   .left { gap: 8px; }
   .left > .card { padding: 9px 12px; }
